@@ -90,7 +90,6 @@ module FFI
     #
     def Hunspell.directories
       @directories ||= KNOWN_DIRECTORIES.select do |path|
-        p path
         File.directory?(path)
       end
     end
