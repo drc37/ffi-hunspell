@@ -4,8 +4,11 @@ module FFI
   module Hunspell
     extend FFI::Library
 
-    ffi_lib ['hunspell-1.2', 'libhunspell-1.2.so.0',
-             'hunspell-1.3', 'libhunspell-1.3.so.0']
+    ffi_lib [
+      'hunspell-1.3', 'libhunspell-1.3.so.0',
+      'hunspell-1.2', 'libhunspell-1.2.so.0'
+    ]
+
 
     attach_function :Hunspell_create, [:string, :string], :pointer
     attach_function :Hunspell_create_key, [:string, :string, :string], :pointer
@@ -39,7 +42,7 @@ module FFI
     #
     # @since 0.2.0
     #
-    def Hunspell.lang
+    def self.lang
       @lang ||= DEFAULT_LANG
     end
 
@@ -54,7 +57,7 @@ module FFI
     #
     # @since 0.2.0
     #
-    def Hunspell.lang=(new_lang)
+    def self.lang=(new_lang)
       @lang = new_lang.to_s
     end
 
@@ -88,10 +91,14 @@ module FFI
     #
     # @since 0.2.0
     #
-    def Hunspell.directories
+    def self.directories
       @directories ||= KNOWN_DIRECTORIES.select do |path|
         File.directory?(path)
       end
+    end
+
+    def self.directories=(dirs)
+      @directories = dirs
     end
 
     #
@@ -108,7 +115,7 @@ module FFI
     #
     # @return [nil]
     #
-    def Hunspell.dict(name=Hunspell.lang,&block)
+    def self.dict(name=Hunspell.lang,&block)
       Dictionary.open(name,&block)
     end
   end
